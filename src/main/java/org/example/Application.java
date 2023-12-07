@@ -34,8 +34,7 @@ public class Application {
                 .collect(Collectors.groupingBy(Order::getCustomer,
                         Collectors.summingDouble(Order::getTotal)));
         totalPerCustomer.forEach((customer, total) ->
-                System.out.println("User: " +
-                        customer.getName() + ", " + "Totale acquisti: " + total));
+                System.out.println("User: " + customer.getName() + ", " + "Totale acquisti: " + total));
 
 
         System.out.println("----------------I 3 PRODOTTI PIU COSTOSI-----------------------");
@@ -47,14 +46,7 @@ public class Application {
 
         System.out.println("----------------MEDIA IMPORTI DEGLI ORDINI-----------------------");
 
-        double averageOrdersPrice = orders.stream()
-                .mapToDouble(order -> order.getProducts().stream()
-                        .mapToDouble(Product::getPrice)
-                        .average()
-                        .orElse(0.0))
-                .average()
-                .orElse(0.0);
-
+        double averageOrdersPrice = orders.stream().mapToDouble(order -> order.getProducts().stream().mapToDouble(Product::getPrice).sum()).average().getAsDouble();
         System.out.println(averageOrdersPrice);
 
         System.out.println("---------------PRODOTTI RAGGRUPPATI PER CATEGORIA + SOMMA DEGLI IMPORTI DI OGNI CATEGORIA-------------");
