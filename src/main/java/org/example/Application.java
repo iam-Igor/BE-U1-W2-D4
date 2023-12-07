@@ -21,9 +21,28 @@ public class Application {
         createCustomers();
         placeOrders();
 
+        System.out.println("--------------------UTENTI--------------------");
+        System.out.println(customers);
+
+        System.out.println("-----------------------Ordini divisi per cliente-----------------------");
 
         Map<Customer, List<Order>> ordersPerCustomer = orders.stream().collect(Collectors.groupingBy(Order::getCustomer));
         ordersPerCustomer.forEach((customer, order) -> System.out.println("User: " + customer.getName() + ", " + order));
+
+        System.out.println("-----------------------Totale costo ordini per cliente-----------------------");
+        Map<Customer, Double> totalPerCustomer = orders.stream()
+                .collect(Collectors.groupingBy(Order::getCustomer,
+                        Collectors.summingDouble(Order::getTotal)));
+        totalPerCustomer.forEach((customer, total) ->
+                System.out.println("User: " +
+                        customer.getName() + ", " + "Totale acquisti: " + total));
+
+
+        System.out.println("----------------I 3 PRODOTTI PIU COSTOSI-----------------------");
+
+        List<Product> expensiveProducts = magazzino.stream().sorted(Comparator.comparing(Product::getPrice).reversed()).
+                limit(3).toList();
+        expensiveProducts.forEach(product -> System.out.println("Prodotto: " + product.getName() + ", " + product.getPrice()));
     }
 
 
