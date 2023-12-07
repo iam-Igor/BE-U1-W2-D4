@@ -43,6 +43,28 @@ public class Application {
         List<Product> expensiveProducts = magazzino.stream().sorted(Comparator.comparing(Product::getPrice).reversed()).
                 limit(3).toList();
         expensiveProducts.forEach(product -> System.out.println("Prodotto: " + product.getName() + ", " + product.getPrice()));
+
+
+        System.out.println("----------------MEDIA IMPORTI DEGLI ORDINI-----------------------");
+
+        double averageOrdersPrice = orders.stream()
+                .mapToDouble(order -> order.getProducts().stream()
+                        .mapToDouble(Product::getPrice)
+                        .average()
+                        .orElse(0.0))
+                .average()
+                .orElse(0.0);
+
+        System.out.println(averageOrdersPrice);
+
+        System.out.println("---------------PRODOTTI RAGGRUPPATI PER CATEGORIA + SOMMA DEGLI IMPORTI DI OGNI CATEGORIA-------------");
+
+        Map<String, Double> filteredProdList = magazzino.stream()
+                .collect(Collectors.groupingBy(Product::getCategory, Collectors.summingDouble(Product::getPrice)));
+
+        filteredProdList.forEach((category, total) -> System.out.println("Categoria: " + category + ", " + "Totale: " + total));
+
+
     }
 
 
@@ -109,6 +131,8 @@ public class Application {
         orders.add(orderUser2_2);
 
     }
+
+
 }
 
 
